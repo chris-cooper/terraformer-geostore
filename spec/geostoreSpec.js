@@ -308,12 +308,20 @@ describe("geostore", function() {
     });
 
     it("should be able to find the correct id using within", function(){
-      gs.within({
-        "type": "Polygon",
-        "coordinates": [ [ [ -122.655849602879201, 45.538304922840894, 0.0 ], [ -122.655691867426299, 45.538304448196108, 0.0 ], [ -122.655692285611451, 45.538236031205983, 0.0 ], [ -122.655850019628431, 45.538236506773742, 0.0 ], [ -122.655849602879201, 45.538304922840894, 0.0 ] ] ]
-      }, function (err, res) {
-        expect(res[0].id).toEqual(1);
+      var flag;
+      runs(function() {
+        flag = false;
+        gs.within({
+          "type": "Polygon",
+          "coordinates": [ [ [ -122.655849602879201, 45.538304922840894, 0.0 ], [ -122.655691867426299, 45.538304448196108, 0.0 ], [ -122.655692285611451, 45.538236031205983, 0.0 ], [ -122.655850019628431, 45.538236506773742, 0.0 ], [ -122.655849602879201, 45.538304922840894, 0.0 ] ] ]
+        }, function (err, res) {
+          expect(res[0].id).toEqual(1);
+          flag = true;
+        });
       });
+      waitsFor(function(){
+        return flag;
+      }, "within should be called", 500);
     });
   });
 
